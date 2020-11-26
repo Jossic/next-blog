@@ -38,7 +38,7 @@ exports.signup = (req, res) => {
 			// });
 			res.json({
 				message:
-					'Enregistrement confirmé, connectez-vous !',
+					'Enregistrement confirmé, connectez-vous',
 			});
 		});
 	});
