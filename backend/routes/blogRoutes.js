@@ -1,7 +1,7 @@
-const express = require("express");
+const express = require('express');
 const router = express.Router();
-const { time } = require("../controllers/blogController");
+const { time } = require('../controllers/blogController');
 
-router.get("/", time);
+router.get('/', time);
 
 module.exports = router;
