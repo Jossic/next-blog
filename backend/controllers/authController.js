@@ -9,16 +9,11 @@ exports.signup = (req, res) => {
 	}).exec((err, user) => {
 		if (user) {
 			return res.status(400).json({
-				error:
-					'Cet email est déjà utilisé',
+				error: 'Cet email est déjà utilisé',
 			});
 		}
 
-		const {
-			name,
-			email,
-			password,
-		} = req.body;
+		const { name, email, password } = req.body;
 		let username = shortId.generate();
 		let profile = `${process.env.CLIENT_URL}/profile/${username}`;
 
@@ -39,8 +34,7 @@ exports.signup = (req, res) => {
 			// 	user: success,
 			// });
 			res.json({
-				message:
-					'Enregistrement confirmé, connectez-vous',
+				message: 'Enregistrement confirmé, connectez-vous',
 			});
 		});
 	});
@@ -52,34 +46,22 @@ exports.signin = (req, res) => {
 	User.findOne({ email }).exec((err, user) => {
 		if (err || !user) {
 			return res.status(400).json({
-				error:
-					'Cet email est déjà utilisé, vous pouvez vous connecter',
+				error: 'Cet email est déjà utilisé, vous pouvez vous connecter',
 			});
 		}
 
 		if (!user.authenticate(password)) {
 			return res.status(400).json({
-				error:
-					'Identifiant et/ou mot de passe incorrecte',
+				error: 'Identifiant et/ou mot de passe incorrecte',
 			});
 		}
 
-		const token = jwt.sign(
-			{ _id: user._id },
-			process.env.JWT_SECRET,
-			{ expiresIn: '1w' }
-		);
+		const token = jwt.sign({ _id: user._id }, process.env.JWT_SECRET, { expiresIn: '1w' });
 
 		res.cookie('token', token, {
 			expiresIn: '1w',
 		});
-		const {
-			_id,
-			username,
-			name,
-			email,
-			role,
-		} = user;
+		const { _id, username, name, email, role } = user;
 		return res.json({
 			token,
 			user: {
@@ -92,3 +74,16 @@ exports.signin = (req, res) => {
 		});
 	});
 };
+
+exports.signout = (req, res) => {
+	res.clearCookie('token');
+	res.json({
+		message: 'Vous êtes maintenant deconnecté.',
+	});
+};
+
+exports.requireSignin = expressJwt({
+	secret: process.env.JWT_SECRET,
+	algorithms: ['HS256'], // added later
+	userProperty: 'auth',
+});
