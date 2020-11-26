@@ -1,5 +1,7 @@
 const User = require('../models/userModel');
 const shortId = require('shortid');
+const jwt = require('jsonwebtoken');
+const expressJwt = require('express-jwt');
 
 exports.signup = (req, res) => {
 	User.findOne({
@@ -40,6 +42,53 @@ exports.signup = (req, res) => {
 				message:
 					'Enregistrement confirmé, connectez-vous',
 			});
+		});
+	});
+};
+
+exports.signin = (req, res) => {
+	const { email, password } = req.body;
+
+	User.findOne({ email }).exec((err, user) => {
+		if (err || !user) {
+			return res.status(400).json({
+				error:
+					'Cet email est déjà utilisé, vous pouvez vous connecter',
+			});
+		}
+
+		if (!user.authenticate(password)) {
+			return res.status(400).json({
+				error:
+					'Identifiant et/ou mot de passe incorrecte',
+			});
+		}
+
+		const token = jwt.sign(
+			{ _id: user._id },
+			process.env.JWT_SECRET,
+			{ expiresIn: '1w' }
+		);
+
+		res.cookie('token', token, {
+			expiresIn: '1w',
+		});
+		const {
+			_id,
+			username,
+			name,
+			email,
+			role,
+		} = user;
+		return res.json({
+			token,
+			user: {
+				_id,
+				username,
+				name,
+				email,
+				role,
+			},
 		});
 	});
 };
