@@ -1,9 +1,12 @@
 import Layout from '../components/Layout';
 import Link from 'next/link';
+import SignupComponent from '../components/auth/SignupComponent';
+
 const Signup = () => {
 	return (
 		<Layout>
-			<h2>Signup</h2>
+			<h2>Signup Page</h2>
+			<SignupComponent />
 			<Link href='/'>
 				<a>Accueil</a>
 			</Link>
