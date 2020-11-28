@@ -56,7 +56,9 @@ exports.signin = (req, res) => {
 			});
 		}
 
-		const token = jwt.sign({ _id: user._id }, process.env.JWT_SECRET, { expiresIn: '1w' });
+		const token = jwt.sign({ _id: user._id }, process.env.JWT_SECRET, {
+			expiresIn: '1w',
+		});
 
 		res.cookie('token', token, {
 			expiresIn: '1w',

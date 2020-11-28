@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { signup } from '../../actions/authAction';
 
 const SignupComponent = () => {
 	const [values, setvalues] = useState({
@@ -15,20 +16,38 @@ const SignupComponent = () => {
 
 	const handleSubmit = (e) => {
 		e.preventDefault();
-		console.table({
-			name,
-			email,
-			password,
-			error,
-			loading,
-			message,
-			showForm,
+
+		setvalues({ ...values, loading: true, error: false });
+		const user = { name, email, password };
+
+		signup(user).then((data) => {
+			if (data.error) {
+				setvalues({ ...values, error: data.error, loading: false });
+			} else {
+				setvalues({
+					...values,
+					name: '',
+					email: '',
+					password: '',
+					error: '',
+					loading: false,
+					message: data.message,
+					showForm: false,
+				});
+			}
 		});
 	};
 
 	const handleChange = (val) => (e) => {
 		setvalues({ ...values, error: false, [val]: e.target.value });
 	};
+
+	const showLoading = () =>
+		loading ? <div className='alert alert-info'>Loading...</div> : '';
+	const showError = () =>
+		error ? <div className='alert alert-danger'>{error}</div> : '';
+	const showMessage = () =>
+		message ? <div className='alert alert-info'>{message}</div> : '';
 
 	const signupForm = () => {
 		return (
@@ -42,6 +61,7 @@ const SignupComponent = () => {
 						placeholder='Entrez votre nom'
 					/>
 				</div>
+
 				<div className='form-group'>
 					<input
 						value={email}
@@ -51,6 +71,7 @@ const SignupComponent = () => {
 						placeholder='Entrez votre email'
 					/>
 				</div>
+
 				<div className='form-group'>
 					<input
 						value={password}
@@ -60,6 +81,7 @@ const SignupComponent = () => {
 						placeholder='Entrez votre mot de passe'
 					/>
 				</div>
+
 				<div>
 					<button className='btn btn-primary'>Créer un compte</button>
 				</div>
@@ -67,7 +89,14 @@ const SignupComponent = () => {
 		);
 	};
 
-	return <>{signupForm()}</>;
+	return (
+		<>
+			{showError()}
+			{showLoading()}
+			{showMessage()}
+			{showForm && signupForm()}
+		</>
+	);
 };
 
 export default SignupComponent;
