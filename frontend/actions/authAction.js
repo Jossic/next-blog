@@ -32,6 +32,22 @@ export const signin = (user) => {
 		.catch((err) => console.log(err));
 };
 
+export const signout = (next) => {
+	removeCookie('token');
+	removeLocalStorage('user');
+	next();
+
+	return fetch(`${API}/signout`, {
+		method: 'GET',
+	})
+		.then((response) => {
+			console.log('Vous êtes maintenant déconnecté');
+		})
+		.catch((err) => {
+			console.log(err);
+		});
+};
+
 export const setCookie = (key, value) => {
 	if (process.browser) {
 		cookie.set(key, value, {
@@ -50,7 +66,7 @@ export const removeCookie = (key) => {
 
 export const getCookie = (key) => {
 	if (process.browser) {
-		cookie.get(key);
+		return cookie.get(key);
 	}
 };
 
@@ -77,7 +93,7 @@ export const isAuth = () => {
 		const cookieChecked = getCookie('token');
 		if (cookieChecked) {
 			if (localStorage.getItem('user')) {
-				JSON.parse(localStorage.getItem('user'));
+				return JSON.parse(localStorage.getItem('user'));
 			} else {
 				return false;
 			}
