@@ -86,6 +86,39 @@ exports.signout = (req, res) => {
 
 exports.requireSignin = expressJwt({
 	secret: process.env.JWT_SECRET,
-	algorithms: ['HS256'], // added later
+	algorithms: ['HS256'],
 	userProperty: 'auth',
 });
+
+exports.authMiddleware = (res, res, next) => {
+	const authUserId = req.user._id;
+	User.findById({ _id: authUserId }).exec((err, user) => {
+		if (err || !user) {
+			return res.status(400).json({
+				error: 'Utilisateur non trouvé',
+			});
+		}
+		req.profile = user;
+		next();
+	});
+};
+
+exports.adminMiddleware = (res, res, next) => {
+	const adminUserId = req.user._id;
+	User.findById({ _id: adminUserId }).exec((err, user) => {
+		if (err || !user) {
+			return res.status(400).json({
+				error: 'Utilisateur non trouvé',
+			});
+		}
+
+		if (user.role !== 1) {
+			return res.status(400).json({
+				error: 'Espace réservé à un administrateur',
+			});
+		}
+
+		req.profile = user;
+		next();
+	});
+};

@@ -39,7 +39,7 @@ const userSchema = new mongoose.Schema(
 		},
 		role: {
 			type: Number,
-			trim: true,
+			default: 0,
 		},
 		photo: {
 			data: Buffer,
@@ -62,9 +62,7 @@ userSchema
 
 		this.salt = this.makeSalt();
 
-		this.hashed_password = this.encryptPassword(
-			password
-		);
+		this.hashed_password = this.encryptPassword(password);
 	})
 
 	.get(function () {
@@ -73,10 +71,7 @@ userSchema
 
 userSchema.methods = {
 	authenticate: function (plainText) {
-		return (
-			this.encryptPassword(plainText) ===
-			this.hashed_password
-		);
+		return this.encryptPassword(plainText) === this.hashed_password;
 	},
 
 	encryptPassword: function (password) {
@@ -94,16 +89,8 @@ userSchema.methods = {
 	},
 
 	makeSalt: function () {
-		return (
-			Math.round(
-				new Date().valueOf() *
-					Math.random()
-			) + ''
-		);
+		return Math.round(new Date().valueOf() * Math.random()) + '';
 	},
 };
 
-module.exports = mongoose.model(
-	'User',
-	userSchema
-);
+module.exports = mongoose.model('User', userSchema);
