@@ -9,6 +9,7 @@ require('dotenv').config();
 const blogRoutes = require('./routes/blogRoutes');
 const authRoutes = require('./routes/authRoutes');
 const userRoutes = require('./routes/userRoutes');
+const categoryRoutes = require('./routes/categoryRoutes');
 
 const app = express();
 
@@ -25,6 +26,7 @@ mongoose
 
 app.use(morgan('dev'));
 app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieParser());
 
 if (process.env.NODE_ENV === 'development') {
@@ -38,6 +40,7 @@ if (process.env.NODE_ENV === 'development') {
 app.use('/api', blogRoutes);
 app.use('/api', authRoutes);
 app.use('/api', userRoutes);
+app.use('/api', categoryRoutes);
 
 const port = process.env.PORT || 8000;
 app.listen(port, () => {

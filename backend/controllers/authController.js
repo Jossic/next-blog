@@ -87,7 +87,7 @@ exports.signout = (req, res) => {
 exports.requireSignin = expressJwt({
 	secret: process.env.JWT_SECRET,
 	algorithms: ['HS256'],
-	userProperty: 'auth',
+	// userProperty: 'auth',
 });
 
 exports.authMiddleware = (req, res, next) => {
@@ -104,6 +104,7 @@ exports.authMiddleware = (req, res, next) => {
 };
 
 exports.adminMiddleware = (req, res, next) => {
+	console.log(req.user);
 	const adminUserId = req.user._id;
 	User.findById({ _id: adminUserId }).exec((err, user) => {
 		if (err || !user) {
