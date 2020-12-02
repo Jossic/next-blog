@@ -19,7 +19,7 @@ const Header = () => {
 
 	return (
 		<div>
-			<Navbar color='light' light expand='md'>
+			<Navbar color='dark' dark expand='md'>
 				<Link href='/'>
 					<NavLink
 						style={{ cursor: 'pointer' }}
@@ -29,7 +29,7 @@ const Header = () => {
 				</Link>
 				<NavbarToggler onClick={toggle} />
 				<Collapse isOpen={isOpen} navbar>
-					<Nav className='mr-auto' navbar>
+					<Nav className='ml-auto' navbar>
 						{!isAuth() && (
 							<>
 								<NavItem>
@@ -48,6 +48,29 @@ const Header = () => {
 								</NavItem>
 							</>
 						)}
+
+						{isAuth() && isAuth().role === 0 && (
+							<NavItem>
+								<Link href='/user'>
+									<NavLink
+										style={{
+											cursor: 'pointer',
+										}}>{`Espace Utilisateur`}</NavLink>
+								</Link>
+							</NavItem>
+						)}
+
+						{isAuth() && isAuth().role === 1 && (
+							<NavItem>
+								<Link href='/admin'>
+									<NavLink
+										style={{
+											cursor: 'pointer',
+										}}>{`Espace Admin`}</NavLink>
+								</Link>
+							</NavItem>
+						)}
+
 						{isAuth() && (
 							<NavItem>
 								<NavLink
