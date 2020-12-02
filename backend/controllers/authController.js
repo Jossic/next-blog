@@ -90,7 +90,7 @@ exports.requireSignin = expressJwt({
 	userProperty: 'auth',
 });
 
-exports.authMiddleware = (res, res, next) => {
+exports.authMiddleware = (req, res, next) => {
 	const authUserId = req.user._id;
 	User.findById({ _id: authUserId }).exec((err, user) => {
 		if (err || !user) {
@@ -103,7 +103,7 @@ exports.authMiddleware = (res, res, next) => {
 	});
 };
 
-exports.adminMiddleware = (res, res, next) => {
+exports.adminMiddleware = (req, res, next) => {
 	const adminUserId = req.user._id;
 	User.findById({ _id: adminUserId }).exec((err, user) => {
 		if (err || !user) {
