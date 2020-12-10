@@ -32,14 +32,14 @@ const Tag = () => {
 	};
 
 	const showTags = () => {
-		return tags.map((c, i) => {
+		return tags.map((t, i) => {
 			return (
 				<button
-					onDoubleClick={() => deleteConfirm(c.slug)}
+					onDoubleClick={() => deleteConfirm(t.slug)}
 					title='Double click pour supprimer'
 					key={i}
 					className='btn btn-outline-primary mr-1 ml-1 mt-3'>
-					{c.name}
+					{t.name}
 				</button>
 			);
 		});
@@ -55,7 +55,6 @@ const Tag = () => {
 	};
 
 	const deleteTag = (slug) => {
-		// console.log('delete', slug);
 		removeTag(slug, token).then((data) => {
 			if (data.error) {
 				console.log(data.error);

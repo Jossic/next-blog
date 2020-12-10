@@ -78,7 +78,6 @@ const Category = () => {
 
 	const clickSubmit = (e) => {
 		e.preventDefault();
-		// console.log('create category', name);
 		create({ name }, token).then((data) => {
 			if (data.error) {
 				setValues({ ...values, error: data.error, success: false });
@@ -129,7 +128,7 @@ const Category = () => {
 		if (removed) {
 			return (
 				<div class='alert alert-danger' role='alert'>
-					Catégorie supprimée
+					Catégorie supprimée !
 				</div>
 			);
 		}
