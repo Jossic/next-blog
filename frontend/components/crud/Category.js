@@ -1,12 +1,7 @@
-/**
- * FULL CODE CATEGORY
- * components/crud/Category.js
- */
-
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Router from 'next/router';
-import { isAuth, getCookie } from '../../actions/authAction';
+import { getCookie } from '../../actions/authAction';
 import {
 	create,
 	getCategories,
@@ -45,7 +40,7 @@ const Category = () => {
 			return (
 				<button
 					onDoubleClick={() => deleteConfirm(c.slug)}
-					title='Double click to delete'
+					title='Double click pour supprimer'
 					key={i}
 					className='btn btn-outline-primary mr-1 ml-1 mt-3'>
 					{c.name}
@@ -56,7 +51,7 @@ const Category = () => {
 
 	const deleteConfirm = (slug) => {
 		let answer = window.confirm(
-			'Are you sure you want to delete this category?'
+			'Etes vous sûr de vouloir supprimer cette catégorie ?'
 		);
 		if (answer) {
 			deleteCategory(slug);
@@ -91,9 +86,9 @@ const Category = () => {
 				setValues({
 					...values,
 					error: false,
-					success: false,
+					success: true,
 					name: '',
-					removed: !removed,
+					removed: false,
 					reload: !reload,
 				});
 			}
@@ -112,19 +107,31 @@ const Category = () => {
 
 	const showSuccess = () => {
 		if (success) {
-			return <p className='text-success'>Category is created</p>;
+			return (
+				<div class='alert alert-success' role='alert'>
+					Catégorie créée !
+				</div>
+			);
 		}
 	};
 
 	const showError = () => {
 		if (error) {
-			return <p className='text-danger'>Category already exist</p>;
+			return (
+				<div class='alert alert-warning' role='alert'>
+					Cette catégorie existe déjà !
+				</div>
+			);
 		}
 	};
 
 	const showRemoved = () => {
 		if (removed) {
-			return <p className='text-danger'>Category is removed</p>;
+			return (
+				<div class='alert alert-danger' role='alert'>
+					Catégorie supprimée
+				</div>
+			);
 		}
 	};
 
