@@ -14,9 +14,6 @@ const Blog = () => {
 					<div className='col-md-6'>
 						<BlogCreate />
 					</div>
-					{/* <div className='col-md-6'>
-						<Tag />
-					</div> */}
 				</div>
 			</Admin>
 		</Layout>
