@@ -7,6 +7,7 @@ const {
 	read,
 	remove,
 	update,
+	photo,
 } = require('../controllers/blogController');
 const {
 	requireSignin,
@@ -19,5 +20,6 @@ router.post('/blogs-categories-tags', listAllBlogsCategoriesTags);
 router.get('/blog/:slug', read);
 router.delete('/blog/:slug', requireSignin, authMiddleware, remove);
 router.put('/blog/:slug', requireSignin, authMiddleware, update);
+router.get('/blog/photo/:slug', photo);
 
 module.exports = router;
