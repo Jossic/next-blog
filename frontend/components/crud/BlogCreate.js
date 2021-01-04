@@ -48,6 +48,8 @@ const BlogCreate = ({ router }) => {
 		hidePublishButton,
 	} = values;
 
+	const token = getCookie('token');
+
 	useEffect(() => {
 		setValues({ ...values, formData: new FormData() });
 		initCategories();
@@ -75,7 +77,22 @@ const BlogCreate = ({ router }) => {
 
 	const publishBlog = (e) => {
 		e.preventDefault();
-		console.log('ok pour publication');
+		// console.log('ok pour publication');
+		createBlog(formData, token).then((data) => {
+			if (data.error) {
+				setValues({ ...values, error: data.error });
+			} else {
+				setValues({
+					...values,
+					title: '',
+					error: '',
+					success: `Un nouvel article "${data.title}" a été créé`,
+				});
+				setBody('');
+				setCategories([]);
+				setTags([]);
+			}
+		});
 	};
 
 	const handleChange = (name) => (e) => {
@@ -94,7 +111,7 @@ const BlogCreate = ({ router }) => {
 		}
 	};
 
-	const handleToggle = (cat) => () => {
+	const handleToggleCat = (cat) => () => {
 		setValues({ ...values, error: '' });
 		const clickedCategory = checkedCat.indexOf(cat);
 		const all = [...checkedCat];
@@ -109,13 +126,28 @@ const BlogCreate = ({ router }) => {
 		formData.set('categories', all);
 	};
 
+	const handleToggleTag = (tag) => () => {
+		setValues({ ...values, error: '' });
+		const clickedTag = checkedTag.indexOf(tag);
+		const all = [...checkedTag];
+
+		if (clickedTag === -1) {
+			all.push(tag);
+		} else {
+			all.splice(clickedTag, 1);
+		}
+		console.log(all);
+		setCheckedTag(all);
+		formData.set('tags', all);
+	};
+
 	const showCategories = () => {
 		return (
 			categories &&
 			categories.map((cat, i) => (
 				<li className='list-unstyled' key={i}>
 					<input
-						onChange={handleToggle(cat._id)}
+						onChange={handleToggleCat(cat._id)}
 						type='checkbox'
 						className='mr-2'
 					/>
@@ -133,7 +165,7 @@ const BlogCreate = ({ router }) => {
 			tags.map((tag, i) => (
 				<li className='list-unstyled' key={i}>
 					<input
-						onChange={handleToggle(tag._id)}
+						onChange={handleToggleTag(tag._id)}
 						type='checkbox'
 						className='mr-2'
 					/>
@@ -192,6 +224,26 @@ const BlogCreate = ({ router }) => {
 					{JSON.stringify(tags)}
 				</div>
 				<div className='col-md-4'>
+					<div>
+						<div className='form-group pb-2'>
+							<h5>Images selectionnées</h5>
+							<hr />
+
+							<small className='text-muted'>
+								Taille max : 1Mo
+							</small>
+							<br />
+							<label className='btn btn-outline-info'>
+								Uploader l'image
+								<input
+									onChange={handleChange('photo')}
+									type='file'
+									accept='image/*'
+									hidden
+								/>
+							</label>
+						</div>
+					</div>
 					<h5>Catégories</h5>
 					<ul style={{ maxHeight: '200px', overflowY: 'scroll' }}>
 						{showCategories()}
