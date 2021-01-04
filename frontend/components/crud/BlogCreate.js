@@ -26,6 +26,9 @@ const BlogCreate = ({ router }) => {
 	const [categories, setCategories] = useState([]);
 	const [tags, setTags] = useState([]);
 
+	const [checkedCat, setCheckedCat] = useState([]);
+	const [checkedTag, setCheckedTag] = useState([]);
+
 	const [body, setBody] = useState(blogFromLS());
 	const [values, setValues] = useState({
 		error: '',
@@ -91,12 +94,31 @@ const BlogCreate = ({ router }) => {
 		}
 	};
 
+	const handleToggle = (cat) => () => {
+		setValues({ ...values, error: '' });
+		const clickedCategory = checkedCat.indexOf(cat);
+		const all = [...checkedCat];
+
+		if (clickedCategory === -1) {
+			all.push(cat);
+		} else {
+			all.splice(clickedCategory, 1);
+		}
+		console.log(all);
+		setCheckedCat(all);
+		formData.set('categories', all);
+	};
+
 	const showCategories = () => {
 		return (
 			categories &&
 			categories.map((cat, i) => (
 				<li className='list-unstyled' key={i}>
-					<input type='checkbox' className='mr-2' />
+					<input
+						onChange={handleToggle(cat._id)}
+						type='checkbox'
+						className='mr-2'
+					/>
 					<label htmlFor='' className='form-check-label'>
 						{cat.name}
 					</label>
@@ -110,7 +132,11 @@ const BlogCreate = ({ router }) => {
 			tags &&
 			tags.map((tag, i) => (
 				<li className='list-unstyled' key={i}>
-					<input type='checkbox' className='mr-2' />
+					<input
+						onChange={handleToggle(tag._id)}
+						type='checkbox'
+						className='mr-2'
+					/>
 					<label htmlFor='' className='form-check-label'>
 						{tag.name}
 					</label>
