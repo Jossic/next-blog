@@ -3,5 +3,5 @@
   "/_document": "pages/_document.js",
   "/_error": "pages/_error.js",
   "/blogs": "pages/blogs.js",
-  "/admin/crud/blog": "pages/admin/crud/blog.js"
+  "/next/dist/pages/_error": "pages/next/dist/pages/_error.js"
 }
