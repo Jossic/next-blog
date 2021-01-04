@@ -9,6 +9,7 @@ import { getTags } from '../../actions/tagAction';
 import { createBlog } from '../../actions/blogAction';
 const ReactQuilll = dynamic(() => import('react-quill'), { ssr: false });
 import '../../node_modules/react-quill/dist/quill.snow.css';
+import { QuillModules, QuillFormats } from '../../helpers/quill';
 
 const BlogCreate = ({ router }) => {
 	const blogFromLS = () => {
@@ -86,7 +87,7 @@ const BlogCreate = ({ router }) => {
 					...values,
 					title: '',
 					error: '',
-					success: `Un nouvel article "${data.title}" a été créé`,
+					success: `Votre nouvel article "${data.title}" a bien été publié`,
 				});
 				setBody('');
 				setCategories([]);
@@ -177,6 +178,24 @@ const BlogCreate = ({ router }) => {
 		);
 	};
 
+	const showError = () => (
+		<div
+			className='alert alert-danger'
+			style={{ display: error ? '' : 'none' }}>
+			{' '}
+			{error}
+		</div>
+	);
+
+	const showSuccess = () => (
+		<div
+			className='alert alert-success'
+			style={{ display: success ? '' : 'none' }}>
+			{' '}
+			{success}
+		</div>
+	);
+
 	const createBlogForm = () => {
 		return (
 			<form onSubmit={publishBlog}>
@@ -193,8 +212,8 @@ const BlogCreate = ({ router }) => {
 				</div>
 				<div className='form-group'>
 					<ReactQuilll
-						modules={createBlog.modules}
-						formats={createBlog.formats}
+						modules={QuillModules}
+						formats={QuillFormats}
 						value={body}
 						placeholder='Votre article'
 						onChange={handleBody}
@@ -210,18 +229,14 @@ const BlogCreate = ({ router }) => {
 		);
 	};
 	return (
-		<div className='container-fluid'>
+		<div className='container-fluid pb-5'>
 			<div className='row'>
 				<div className='col-md-8'>
 					{createBlogForm()}
-					<hr />
-					{JSON.stringify(title)}
-					<hr />
-					{JSON.stringify(body)}
-					<hr />
-					{JSON.stringify(categories)}
-					<hr />
-					{JSON.stringify(tags)}
+					<div className='pt-3'>
+						{showError()}
+						{showSuccess()}
+					</div>
 				</div>
 				<div className='col-md-4'>
 					<div>
@@ -259,39 +274,5 @@ const BlogCreate = ({ router }) => {
 		</div>
 	);
 };
-
-createBlog.modules = {
-	toolbar: [
-		[
-			{ header: '1' },
-			{ header: '2' },
-			{ header: [3, 4, 5, 6] },
-			{ font: [] },
-		],
-		[{ size: [] }],
-		['bold', 'italic', 'underline', 'strike', 'blockquote'],
-		[{ list: 'ordered' }, { list: 'bullet' }],
-		['link', 'image', 'video'],
-		['clean'],
-		['code-block'],
-	],
-};
-
-createBlog.formats = [
-	'header',
-	'font',
-	'size',
-	'bold',
-	'italic',
-	'underline',
-	'strike',
-	'blockquote',
-	'list',
-	'bullet',
-	'link',
-	'image',
-	'video',
-	'code-block',
-];
 
 export default withRouter(BlogCreate);
