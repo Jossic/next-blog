@@ -7,7 +7,15 @@ import Card from '../../components/blog/Card';
 import { API, DOMAIN, APP_NAME, FB_APP_ID } from '../../config';
 import { withRouter } from 'next/router';
 
-const Blogs = ({ blogs, categories, tags, size, router }) => {
+const Blogs = ({
+	blogs,
+	categories,
+	tags,
+	totalBlogs,
+	blogsLimit,
+	blogsSkip,
+	router,
+}) => {
 	const head = () => (
 		<Head>
 			<title> {APP_NAME} | Le blog </title>
@@ -43,6 +51,37 @@ const Blogs = ({ blogs, categories, tags, size, router }) => {
 		</Head>
 	);
 
+	const [limit, setLimit] = useState(blogsLimit);
+	const [skip, setSkip] = useState(0);
+	const [size, setSize] = useState(totalBlogs);
+	const [loadedBlogs, setLoadedBlogs] = useState([]);
+
+	const loadMore = () => {
+		let toSkip = skip + limit;
+		listBlogsWithCategoriesAndTags(toSkip, limit).then((data) => {
+			if (data.error) {
+				console.log(data.error);
+			} else {
+				setLoadedBlogs([...loadedBlogs, ...data.blogs]);
+				setSize(data.size);
+				setSkip(toSkip);
+			}
+		});
+	};
+
+	const loadMoreButton = () => {
+		return (
+			size > 0 &&
+			size >= limit && (
+				<button
+					onClick={loadMore}
+					className='btn btn-outline-primary btn-lg'>
+					Voir les suivants
+				</button>
+			)
+		);
+	};
+
 	const showAllBlogs = () => {
 		return blogs.map((blog, i) => (
 			<article key={i}>
@@ -70,6 +109,14 @@ const Blogs = ({ blogs, categories, tags, size, router }) => {
 		));
 	};
 
+	const showLoaderBlogs = () => {
+		return loadedBlogs.map((blog, i) => (
+			<article key={i}>
+				<Card blog={blog} />
+			</article>
+		));
+	};
+
 	return (
 		<>
 			{head()}
@@ -91,10 +138,10 @@ const Blogs = ({ blogs, categories, tags, size, router }) => {
 							</section>
 						</header>
 					</div>
-					<div className='container-fluid'>
-						<div className='row'>
-							<div className='col-md-12'>{showAllBlogs()}</div>
-						</div>
+					<div className='container-fluid'>{showAllBlogs()}</div>
+					<div className='container-fluid'>{showLoaderBlogs()}</div>
+					<div className='text-center pt-5 pb-5'>
+						{loadMoreButton()}
 					</div>
 				</main>
 			</Layout>
@@ -103,7 +150,9 @@ const Blogs = ({ blogs, categories, tags, size, router }) => {
 };
 
 Blogs.getInitialProps = () => {
-	return listBlogsWithCategoriesAndTags().then((data) => {
+	let skip = 0;
+	let limit = 2;
+	return listBlogsWithCategoriesAndTags(skip, limit).then((data) => {
 		if (data.error) {
 			console.log(data.error);
 		} else {
@@ -111,7 +160,9 @@ Blogs.getInitialProps = () => {
 				blogs: data.blogs,
 				categories: data.categories,
 				tags: data.tags,
-				size: data.size,
+				totalBlogs: data.size,
+				blogsLimit: limit,
+				blogsSkip: skip,
 			};
 		}
 	});
