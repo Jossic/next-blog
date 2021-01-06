@@ -2,8 +2,7 @@
   "/_app": "pages/_app.js",
   "/_document": "pages/_document.js",
   "/_error": "pages/_error.js",
-  "/categories/[slug]": "pages/categories/[slug].js",
-  "/admin/crud/blogs": "pages/admin/crud/blogs.js",
   "/blogs": "pages/blogs.js",
+  "/categories/[slug]": "pages/categories/[slug].js",
   "/tags/[slug]": "pages/tags/[slug].js"
 }
