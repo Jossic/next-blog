@@ -1,18 +1,33 @@
 import Head from 'next/head';
 import Link from 'next/link';
 import Layout from '../../components/Layout';
-import { useState } from 'react';
-import { singleBlog } from '../../actions/blogAction';
-import Card from '../../components/blog/Card';
+import { useEffect, useState } from 'react';
+import { listRelated, singleBlog } from '../../actions/blogAction';
+import SmallCard from '../../components/blog/SmallCard';
 import { API, DOMAIN, APP_NAME, FB_APP_ID } from '../../config';
 import renderHTML from 'react-render-html';
 import moment from 'moment';
 
 const SingleBlog = ({ blog, query }) => {
+	const [related, setRelated] = useState([]);
+
+	const loadRelated = () => {
+		listRelated({ blog }).then((data) => {
+			if (data.error) {
+				console.log(data.error);
+			} else {
+				setRelated(data);
+			}
+		});
+	};
+
+	useEffect(() => {
+		loadRelated();
+	}, []);
+
 	const head = () => (
 		<Head>
 			<title>
-				{' '}
 				{APP_NAME} | {blog.title}{' '}
 			</title>
 			<meta name='description' content={blog.mdesc} />
@@ -53,6 +68,17 @@ const SingleBlog = ({ blog, query }) => {
 				</a>
 			</Link>
 		));
+
+	const showRelatedBlogs = () => {
+		return related.map((blog, i) => (
+			<div key={i} className='col-md-4'>
+				<article>
+					<SmallCard blog={blog} />
+				</article>
+			</div>
+		));
+	};
+
 	return (
 		<>
 			{head()}
@@ -98,7 +124,9 @@ const SingleBlog = ({ blog, query }) => {
 											Articles similaires
 										</h4>
 										<hr />
-										<p>Voir les articles similaires</p>
+										<div className='row'>
+											{showRelatedBlogs()}
+										</div>
 									</div>
 									<div className='container pb-5'>
 										<p>Voir les commentaires</p>

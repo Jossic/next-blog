@@ -290,9 +290,9 @@ exports.listRelated = (req, res) => {
 		.exec((err, blogs) => {
 			if (err) {
 				return res.status(400).json({
-					error: 'Blogs not found',
+					error: 'Article non trouvé',
 				});
-				res.json(blogs);
 			}
+			res.json(blogs);
 		});
 };
