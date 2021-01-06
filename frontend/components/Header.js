@@ -15,6 +15,8 @@ import Router from 'next/router';
 
 import '../node_modules/nprogress/nprogress.css';
 
+import Search from './blog/Search';
+
 Router.onRouteChangeStart = (url) => NProgress.start();
 Router.onRouteChangeComplete = (url) => NProgress.done();
 Router.onRouteChangeError = (url) => NProgress.done();
@@ -25,7 +27,7 @@ const Header = () => {
 	const toggle = () => setIsOpen(!isOpen);
 
 	return (
-		<div>
+		<>
 			<Navbar color='dark' dark expand='md'>
 				<Link href='/'>
 					<NavLink
@@ -102,7 +104,8 @@ const Header = () => {
 					</Nav>
 				</Collapse>
 			</Navbar>
-		</div>
+			<Search />
+		</>
 	);
 };
 
