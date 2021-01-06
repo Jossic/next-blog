@@ -58,9 +58,26 @@ const BlogRead = () => {
 						onClick={() => deleteConfirm(blog.slug)}>
 						Supprimer
 					</button>
+					{showUpdateButton(blog)}
 				</div>
 			);
 		});
+	};
+
+	const showUpdateButton = (blog) => {
+		if (isAuth() && isAuth().role === 0) {
+			return (
+				<Link href={`/user/crud/${blog.slug}`}>
+					<a className='btn btn-sm btn-warning ml-1'>Modifier</a>
+				</Link>
+			);
+		} else if (isAuth() && isAuth().role === 1) {
+			return (
+				<Link href={`/admin/crud/${blog.slug}`}>
+					<a className='btn btn-sm btn-warning ml-1'>Modifier</a>
+				</Link>
+			);
+		}
 	};
 
 	return (
