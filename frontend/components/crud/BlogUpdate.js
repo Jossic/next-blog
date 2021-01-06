@@ -13,6 +13,13 @@ import { QuillModules, QuillFormats } from '../../helpers/quill';
 
 const BlogUpdate = ({ router }) => {
 	const [body, setBody] = useState('');
+
+	const [categories, setCategories] = useState([]);
+	const [tags, setTags] = useState([]);
+
+	const [checkedCat, setCheckedCat] = useState([]);
+	const [checkedTag, setCheckedTag] = useState([]);
+
 	const [values, setValues] = useState({
 		error: '',
 		success: '',
@@ -25,7 +32,28 @@ const BlogUpdate = ({ router }) => {
 	useEffect(() => {
 		setValues({ ...values, formData: new FormData() });
 		initBlog();
+		initCategories();
+		initTags();
 	}, [router]);
+
+	const initCategories = () => {
+		getCategories().then((data) => {
+			if (data.error) {
+				setValues({ ...values, error: data.error });
+			} else {
+				setCategories(data);
+			}
+		});
+	};
+	const initTags = () => {
+		getTags().then((data) => {
+			if (data.error) {
+				setValues({ ...values, error: data.error });
+			} else {
+				setTags(data);
+			}
+		});
+	};
 
 	const initBlog = () => {
 		if (router.query.slug) {
@@ -35,9 +63,32 @@ const BlogUpdate = ({ router }) => {
 				} else {
 					setValues({ ...values, title: data.title });
 					setBody(data.body);
+					setCategoriesArray(data.categories);
+					setTagsArray(data.tags);
 				}
 			});
 		}
+	};
+
+	const setCategoriesArray = (blogCategories) => {
+		let cat = [];
+		blogCategories.map((c, i) => {
+			cat.push(c._id);
+		});
+		setCheckedCat(cat);
+	};
+
+	const setTagsArray = (blogTags) => {
+		let ta = [];
+		blogTags.map((t, i) => {
+			ta.push(t._id);
+		});
+		setCheckedTag(ta);
+	};
+
+	const handleChange = (name) => (e) => {
+		const value = name === 'photo' ? e.target.files[0] : e.target.value;
+		setValues({ ...values, [name]: value, formData, error: '' });
 	};
 
 	const handleBody = (e) => {
@@ -49,10 +100,90 @@ const BlogUpdate = ({ router }) => {
 		console.log('Article modifié');
 	};
 
-	const handleChange = (name) => (e) => {
-		const value = name === 'photo' ? e.target.files[0] : e.target.value;
-		formData.set(name, value);
-		setValues({ ...values, [name]: value, formData, error: '' });
+	const handleToggleCat = (cat) => () => {
+		setValues({ ...values, error: '' });
+		const clickedCategory = checkedCat.indexOf(cat);
+		const all = [...checkedCat];
+
+		if (clickedCategory === -1) {
+			all.push(cat);
+		} else {
+			all.splice(clickedCategory, 1);
+		}
+		console.log(all);
+		setCheckedCat(all);
+		formData.set('categories', all);
+	};
+
+	const handleToggleTag = (tag) => () => {
+		setValues({ ...values, error: '' });
+		const clickedTag = checkedTag.indexOf(tag);
+		const all = [...checkedTag];
+
+		if (clickedTag === -1) {
+			all.push(tag);
+		} else {
+			all.splice(clickedTag, 1);
+		}
+		console.log(all);
+		setCheckedTag(all);
+		formData.set('tags', all);
+	};
+
+	const findOutCategory = (cat) => {
+		const result = checkedCat.indexOf(cat);
+		if (result !== -1) {
+			return true;
+		} else {
+			return false;
+		}
+	};
+
+	const findOutTags = (tag) => {
+		const result = checkedTag.indexOf(tag);
+		if (result !== -1) {
+			return true;
+		} else {
+			return false;
+		}
+	};
+
+	const showCategories = () => {
+		return (
+			categories &&
+			categories.map((cat, i) => (
+				<li className='list-unstyled' key={i}>
+					<input
+						onChange={handleToggleCat(cat._id)}
+						type='checkbox'
+						className='mr-2'
+						checked={findOutCategory(cat._id)}
+					/>
+					<label htmlFor='' className='form-check-label'>
+						{cat.name}
+					</label>
+				</li>
+			))
+		);
+	};
+
+	const showTags = () => {
+		return (
+			tags &&
+			tags.map((tag, i) => (
+				<li className='list-unstyled' key={i}>
+					<input
+						onChange={handleToggleTag(tag._id)}
+						type='checkbox'
+						className='mr-2'
+						checked={findOutTags(tag._id)}
+					/>
+					<label htmlFor='' className='form-check-label'>
+						{tag.name}
+					</label>
+				</li>
+			))
+		);
 	};
 
 	const updateBlogForm = () => {
@@ -99,8 +230,33 @@ const BlogUpdate = ({ router }) => {
 					<div>
 						<div className='form-group pb-2'>
 							<h5>Images selectionnées</h5>
+							<hr />
+
+							<small className='text-muted'>
+								Taille max : 1Mo
+							</small>
+							<br />
+							<label className='btn btn-outline-info'>
+								Uploader l'image
+								<input
+									onChange={handleChange('photo')}
+									type='file'
+									accept='image/*'
+									hidden
+								/>
+							</label>
 						</div>
 					</div>
+					<h5>Catégories</h5>
+					<ul style={{ maxHeight: '200px', overflowY: 'scroll' }}>
+						{showCategories()}
+					</ul>
+					<hr />
+					<h5>Tags</h5>
+					<ul style={{ maxHeight: '200px', overflowY: 'scroll' }}>
+						{showTags()}
+					</ul>
+					<hr />
 				</div>
 			</div>
 		</div>
