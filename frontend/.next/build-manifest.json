@@ -38,19 +38,19 @@
       "static/chunks/styles.js",
       "static/chunks/pages/blogs.js"
     ],
-    "/blogs/[slug]": [
-      "static/chunks/main.js",
-      "static/chunks/webpack.js",
-      "static/css/styles.chunk.css",
-      "static/chunks/styles.js",
-      "static/chunks/pages/blogs/[slug].js"
-    ],
     "/categories/[slug]": [
       "static/chunks/main.js",
       "static/chunks/webpack.js",
       "static/css/styles.chunk.css",
       "static/chunks/styles.js",
       "static/chunks/pages/categories/[slug].js"
+    ],
+    "/tags/[slug]": [
+      "static/chunks/main.js",
+      "static/chunks/webpack.js",
+      "static/css/styles.chunk.css",
+      "static/chunks/styles.js",
+      "static/chunks/pages/tags/[slug].js"
     ]
   },
   "ampFirstPages": []

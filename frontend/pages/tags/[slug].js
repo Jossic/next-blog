@@ -1,13 +1,13 @@
 import Head from 'next/head';
 import Link from 'next/link';
 import Layout from '../../components/Layout';
-import { singleCategory } from '../../actions/categoryAction';
+import { singleTag } from '../../actions/tagAction';
 import { API, DOMAIN, APP_NAME, FB_APP_ID } from '../../config';
 import renderHTML from 'react-render-html';
 import moment from 'moment';
 import Card from '../../components/blog/Card';
 
-const Category = ({ category, blogs }) => {
+const Tag = ({ tag, blogs }) => {
 	return (
 		<>
 			<Layout>
@@ -16,7 +16,7 @@ const Category = ({ category, blogs }) => {
 						<header>
 							<div className='col-md-12 pt-3'>
 								<h1 className='display-4 font-weight-bold'>
-									Articles liés à la catégorie {category.name}
+									Tags liés à {tag.name}
 								</h1>
 								{blogs.map((blog, i) => (
 									<div>
@@ -33,17 +33,17 @@ const Category = ({ category, blogs }) => {
 	);
 };
 
-Category.getInitialProps = ({ query }) => {
-	return singleCategory(query.slug).then((data) => {
+Tag.getInitialProps = ({ query }) => {
+	return singleTag(query.slug).then((data) => {
 		if (data.error) {
 			console.log(data.error);
 		} else {
 			return {
-				category: data.category,
+				tag: data.tag,
 				blogs: data.blogs,
 			};
 		}
 	});
 };
 
-export default Category;
+export default Tag;
