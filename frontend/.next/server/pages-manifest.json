@@ -3,6 +3,7 @@
   "/_document": "pages/_document.js",
   "/_error": "pages/_error.js",
   "/admin/crud/blogs": "pages/admin/crud/blogs.js",
-  "/admin/crud/[slug]": "pages/admin/crud/[slug].js",
-  "/blogs": "pages/blogs.js"
+  "/blogs": "pages/blogs.js",
+  "/categories/[slug]": "pages/categories/[slug].js",
+  "/blogs/[slug]": "pages/blogs/[slug].js"
 }
