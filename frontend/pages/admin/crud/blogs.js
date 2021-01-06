@@ -7,12 +7,14 @@ const Blogs = () => {
 	return (
 		<Layout>
 			<Admin>
-				<div className='row'>
-					<div className='col-md-12 pt-5 pb-5'>
-						<h2>Gestion des articles</h2>
-					</div>
-					<div className='col-md-12'>
-						<BlogRead />
+				<div className='container'>
+					<div className='row'>
+						<div className='col-md-12 pt-5 pb-5'>
+							<h2>Gestion des articles</h2>
+						</div>
+						<div className='col-md-12'>
+							<BlogRead />
+						</div>
 					</div>
 				</div>
 			</Admin>
