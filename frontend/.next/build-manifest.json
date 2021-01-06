@@ -31,6 +31,13 @@
       "static/chunks/styles.js",
       "static/chunks/pages/admin/crud/[slug].js"
     ],
+    "/admin/crud/blogs": [
+      "static/chunks/main.js",
+      "static/chunks/webpack.js",
+      "static/css/styles.chunk.css",
+      "static/chunks/styles.js",
+      "static/chunks/pages/admin/crud/blogs.js"
+    ],
     "/blogs": [
       "static/chunks/main.js",
       "static/chunks/webpack.js",

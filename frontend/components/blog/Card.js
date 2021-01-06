@@ -47,7 +47,7 @@ const Card = ({ blog }) => {
 					<section>
 						<img
 							src={`${API}/blog/photo/${blog.slug}`}
-							style={{ maxHeight: '150px', width: 'auto' }}
+							style={{ maxHeight: 'auto', width: '100%' }}
 							className='img img-fluid'
 							alt={blog.title}
 						/>
