@@ -37,13 +37,6 @@
       "static/css/styles.chunk.css",
       "static/chunks/styles.js",
       "static/chunks/pages/blogs/[slug].js"
-    ],
-    "/user/crud/blog": [
-      "static/chunks/main.js",
-      "static/chunks/webpack.js",
-      "static/css/styles.chunk.css",
-      "static/chunks/styles.js",
-      "static/chunks/pages/user/crud/blog.js"
     ]
   },
   "ampFirstPages": []

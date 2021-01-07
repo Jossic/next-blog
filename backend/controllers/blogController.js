@@ -1,6 +1,7 @@
 const Blog = require('../models/blogModel');
 const Category = require('../models/categoryModel');
 const Tag = require('../models/tagModel');
+const User = require('../models/userModel');
 const formidable = require('formidable');
 const slugify = require('slugify');
 const stripHtml = require('string-strip-html');
@@ -317,4 +318,28 @@ exports.listSearch = (req, res) => {
 			}
 		).select('-photo -body');
 	}
+};
+
+exports.listByUser = (req, res) => {
+	User.findOne({ username: req.params.username }).exec((err, user) => {
+		if (err) {
+			return res.status(400).json({
+				error: errorHandler(err),
+			});
+		}
+		let userId = user._id;
+		Blog.find({ postedBy: userId })
+			.populate('categories', '_id name slug')
+			.populate('tags', '_id name slug')
+			.populate('postedBy', '_id name username')
+			.select('_id title slug postedBy createdAd updatedAt')
+			.exec((err, data) => {
+				if (err) {
+					return res.status(400).json({
+						error: errorHandler(err),
+					});
+				}
+				res.json(data);
+			});
+	});
 };
