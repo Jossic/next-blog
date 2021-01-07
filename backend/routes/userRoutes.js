@@ -12,7 +12,7 @@ const {
 	photo,
 } = require('../controllers/userController');
 
-router.get('/profile', requireSignin, authMiddleware, read);
+router.get('/user/profile', requireSignin, authMiddleware, read);
 router.get('/user/:username', publicProfile);
 router.put('/user/update', requireSignin, authMiddleware, update);
 router.get('/user/photo/:username', photo);

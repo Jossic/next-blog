@@ -31,13 +31,6 @@
       "static/chunks/styles.js",
       "static/chunks/pages/signin.js"
     ],
-    "/user": [
-      "static/chunks/main.js",
-      "static/chunks/webpack.js",
-      "static/css/styles.chunk.css",
-      "static/chunks/styles.js",
-      "static/chunks/pages/user.js"
-    ],
     "/user/update": [
       "static/chunks/main.js",
       "static/chunks/webpack.js",
