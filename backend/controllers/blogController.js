@@ -8,7 +8,6 @@ const _ = require('lodash');
 const { errorHandler } = require('../helpers/dbErrorHandler');
 const fs = require('fs');
 const { smartTrim } = require('../helpers/blog');
-const { exec } = require('child_process');
 
 exports.create = (req, res) => {
 	let form = new formidable.IncomingForm();
