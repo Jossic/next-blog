@@ -59,6 +59,12 @@ exports.update = (req, res) => {
 		let user = req.profile;
 		user = _.extend(user, fields);
 
+		if (fields.password && fields.password.length < 6) {
+			return res.status(400).json({
+				error: 'Le mot de passe doit avoir au moins 6 caractères',
+			});
+		}
+
 		if (files.photo) {
 			if (files.photo.size > 10000000) {
 				return res.status(400).json({
