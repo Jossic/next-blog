@@ -69,9 +69,9 @@ const SingleBlog = ({ blog, query }) => {
 			</Link>
 		));
 
-	const showRelatedBlogs = () => {
+	const showRelatedBlog = () => {
 		return related.map((blog, i) => (
-			<div key={i} className='col-md-4'>
+			<div className='col-md-4' key={i}>
 				<article>
 					<SmallCard blog={blog} />
 				</article>
@@ -103,7 +103,12 @@ const SingleBlog = ({ blog, query }) => {
 										{blog.title}
 									</h1>
 									<p className='lead mt-3 mark'>
-										Ecrit par {blog.postedBy.name} | Publié{' '}
+										Ecrit par{' '}
+										<Link
+											href={`/profile/${blog.postedBy.username}`}>
+											<a>{blog.postedBy.username}</a>
+										</Link>{' '}
+										| Publié{' '}
 										{moment(blog.updatedAt).fromNow()}
 									</p>
 
@@ -125,7 +130,7 @@ const SingleBlog = ({ blog, query }) => {
 										</h4>
 										<hr />
 										<div className='row'>
-											{showRelatedBlogs()}
+											{showRelatedBlog()}
 										</div>
 									</div>
 									<div className='container pb-5'>

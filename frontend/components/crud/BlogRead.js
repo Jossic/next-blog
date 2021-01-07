@@ -50,7 +50,7 @@ const BlogRead = () => {
 				<div key={i} className='pb-3'>
 					<h3>{blog.title}</h3>
 					<p className='mark'>
-						Ecrit par {blog.postedBy.name} | Publié{' '}
+						Ecrit par {blog.postedBy.username} | Publié{' '}
 						{moment(blog.updatedAt).fromNow()}
 					</p>
 					<button
