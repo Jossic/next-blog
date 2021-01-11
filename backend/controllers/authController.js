@@ -5,6 +5,8 @@ const expressJwt = require('express-jwt');
 const { errorHandler } = require('../helpers/dbErrorHandler');
 const Blog = require('../models/blogModel');
 
+const { sendEmailWithNodemailer } = require('../helpers/email');
+
 exports.signup = (req, res) => {
 	User.findOne({
 		email: req.body.email,
@@ -143,4 +145,46 @@ exports.canUpdateDeleteBlog = (req, res, next) => {
 		}
 		next();
 	});
+};
+
+exports.forgotPassword = (req, res) => {
+	const { email } = req.body;
+
+	User.findOne({ email }, (err, user) => {
+		if (err || !user) {
+			return res.status(401).json({
+				error: 'Aucun utilisateur avec cet adresse mail',
+			});
+		}
+		const token = jwt.sign(
+			{ _id: user._id },
+			process.env.JWT_RESET_PASSWORD,
+			{ expiresIn: '15m' }
+		);
+
+		const emailData = {
+			from: process.env.NODE_MAILER_NOREPLY,
+			to: email,
+			subject: `${process.env.APP_NAME} | Lien de réinitialisation de mot de passe`,
+			html: `
+        <h4>Réinitialisation du mot de passe, merci de ne pas tenir compte de ce mail si vous n'êtes pas à l'origine de cette procèdure:</h4>
+        <p>Merci de suivre le lien suivant: ${process.env.CLIENT_URL}/auth/password/reset/${token}</p>
+        `,
+		};
+
+		return User.updateOne({ resetPasswordLink: token }, (err, success) => {
+			if (err) {
+				return res.json({ error: errorHandler(err) });
+			} else {
+				sendEmailWithNodemailer(req, res, emailData);
+				res.json({
+					message: `Mail envoyé à l'adresse ${mail}. Merci de suivre les instructions sous 15 minutes`,
+				});
+			}
+		});
+	});
+};
+
+exports.resetPassword = (req, res) => {
+	//
 };

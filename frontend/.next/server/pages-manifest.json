@@ -3,5 +3,5 @@
   "/_document": "pages/_document.js",
   "/_error": "pages/_error.js",
   "/contact": "pages/contact.js",
-  "/profile/[username]": "pages/profile/[username].js"
+  "/signup": "pages/signup.js"
 }

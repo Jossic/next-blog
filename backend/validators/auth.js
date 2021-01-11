@@ -18,3 +18,19 @@ exports.userSigninValidator = [
 		.isLength({ min: 6 })
 		.withMessage('Le mot de passe doit comporter au minimum 6 caractères'),
 ];
+
+exports.forgotPasswordValidator = [
+	check('email')
+		.not()
+		.isEmpty()
+		.isEmail()
+		.withMessage("L'adresse email n'est pas au bon format"),
+];
+
+exports.resetPasswordValidator = [
+	check('newPassword')
+		.not()
+		.isEmpty()
+		.isLength({ min: 6 })
+		.withMessage('Le mot de passe doit comporter au minimum 6 caractères'),
+];
