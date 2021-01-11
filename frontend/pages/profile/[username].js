@@ -114,7 +114,7 @@ const UserProfile = ({ user, blogs, query }) => {
 										Contacter {user.name}
 									</h5>
 									<br />
-									<ContactForm />
+									<ContactForm authorEmail={user.email} />
 								</div>
 							</div>
 						</div>
