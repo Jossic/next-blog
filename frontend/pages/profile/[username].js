@@ -4,6 +4,7 @@ import Layout from '../../components/Layout';
 import { userPublicProfile } from '../../actions/userAction';
 import { API, DOMAIN, APP_NAME, FB_APP_ID } from '../../config';
 import moment from 'moment';
+import ContactForm from '../../components/form/ContactForm';
 
 const UserProfile = ({ user, blogs, query }) => {
 	const head = () => (
@@ -113,7 +114,7 @@ const UserProfile = ({ user, blogs, query }) => {
 										Contacter {user.name}
 									</h5>
 									<br />
-									<p>contact form</p>
+									<ContactForm />
 								</div>
 							</div>
 						</div>
