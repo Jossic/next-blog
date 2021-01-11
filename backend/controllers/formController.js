@@ -5,18 +5,16 @@ exports.contactForm = (req, res) => {
 	const { name, email, message } = req.body;
 
 	const emailData = {
-		from: 'your_name@gmail.com', // MAKE SURE THIS EMAIL IS YOUR GMAIL FOR WHICH YOU GENERATED APP PASSWORD
-		to: 'your_name@gmail.com', // WHO SHOULD BE RECEIVING THIS EMAIL? IT SHOULD BE YOUR GMAIL
-		subject: 'Contact Next-blog',
-		text: `Email received from contact from \n Sender name: ${name} \n Sender email: ${email} \n Sender message: ${message}`,
+		from: process.env.NODE_MAILER_USER, // MAKE SURE THIS EMAIL IS YOUR GMAIL FOR WHICH YOU GENERATED APP PASSWORD
+		to: process.env.NODE_MAILER_USER, // WHO SHOULD BE RECEIVING THIS EMAIL? IT SHOULD BE YOUR GMAIL
+		subject: `${process.env.APP_NAME} | Formulaire de contact`,
+		text: `Blog Next-JS \n Venant de: ${name} \n email: ${email} \n Son message: ${message}`,
 		html: `
-        <h4>Email received from contact form:</h4>
-        <p>Sender name: ${name}</p>
-        <p>Sender email: ${email}</p>
-        <p>Sender message: ${message}</p>
+        <h4>Email reçu du formulaire de contact:</h4>
+        <p>Nom: ${name}</p>
+        <p>Email: ${email}</p>
+        <p>Message: ${message}</p>
         <hr />
-        <p>This email may contain sensitive information</p>
-        <p>https://onemancode.com</p>
     `,
 	};
 
