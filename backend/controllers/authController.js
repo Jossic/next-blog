@@ -2,6 +2,7 @@ const User = require('../models/userModel');
 const shortId = require('shortid');
 const jwt = require('jsonwebtoken');
 const expressJwt = require('express-jwt');
+const _ = require('lodash');
 const { errorHandler } = require('../helpers/dbErrorHandler');
 const Blog = require('../models/blogModel');
 
@@ -172,13 +173,13 @@ exports.forgotPassword = (req, res) => {
         `,
 		};
 
-		return User.updateOne({ resetPasswordLink: token }, (err, success) => {
+		return user.updateOne({ resetPasswordLink: token }, (err, success) => {
 			if (err) {
 				return res.json({ error: errorHandler(err) });
 			} else {
 				sendEmailWithNodemailer(req, res, emailData);
 				res.json({
-					message: `Mail envoyé à l'adresse ${mail}. Merci de suivre les instructions sous 15 minutes`,
+					message: `Mail envoyé à l'adresse ${email}. Merci de suivre les instructions sous 15 minutes`,
 				});
 			}
 		});
@@ -186,5 +187,44 @@ exports.forgotPassword = (req, res) => {
 };
 
 exports.resetPassword = (req, res) => {
-	//
+	console.log('req.body ->', req.body);
+	const { resetPasswordLink, newPassword } = req.body;
+	if (resetPasswordLink) {
+		jwt.verify(
+			resetPasswordLink,
+			process.env.JWT_RESET_PASSWORD,
+			function (err, decoded) {
+				if (err) {
+					return res.status(401).json({
+						error: `Lien expiré, merci d'essayer à nouveau`,
+					});
+				}
+				User.findOne({ resetPasswordLink }, (err, user) => {
+					if (err || !user) {
+						return res.status(401).json({
+							error: `Ouups, il y a un problème, merci d'essayer à nouveau`,
+						});
+					}
+					const updatedFields = {
+						password: newPassword,
+						resetPasswordLink: '',
+					};
+
+					user = _.extend(user, updatedFields);
+
+					user.save((err, result) => {
+						console.log('user ->', user);
+						if (err) {
+							return res.status(400).json({
+								error: errorHandler(err),
+							});
+						}
+						res.json({
+							message: `C'est bon ! Vous pouvez maintenant vous connecter`,
+						});
+					});
+				});
+			}
+		);
+	}
 };
