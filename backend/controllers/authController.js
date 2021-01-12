@@ -8,6 +8,39 @@ const Blog = require('../models/blogModel');
 
 const { sendEmailWithNodemailer } = require('../helpers/email');
 
+exports.preSignup = (req, res) => {
+	const { name, email, password } = req.body;
+	User.findOne({ email: email.toLowerCase() }, (err, user) => {
+		if (user) {
+			return res.status(400).json({
+				error: 'Email déjà pris',
+			});
+		}
+		const token = jwt.sign(
+			{ name, email, password },
+			process.env.JWT_SECRET_ACTIVATION,
+			{
+				expiresIn: '15m',
+			}
+		);
+
+		const emailData = {
+			from: process.env.NODE_MAILER_NOREPLY,
+			to: email,
+			subject: `${process.env.APP_NAME} | Lien d'activation de votre compte`,
+			html: `
+        <h4>Afin d'activer votre compte</h4>
+        <p>Merci de suivre le lien suivant: ${process.env.CLIENT_URL}/auth/account/activate/${token}</p>
+        `,
+		};
+
+		sendEmailWithNodemailer(req, res, emailData);
+		res.json({
+			message: `Mail envoyé à l'adresse ${email}. Merci de suivre les instructions sans les 15 minutes`,
+		});
+	});
+};
+
 exports.signup = (req, res) => {
 	User.findOne({
 		email: req.body.email,
