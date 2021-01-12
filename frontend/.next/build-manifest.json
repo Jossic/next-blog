@@ -24,19 +24,12 @@
       "static/chunks/webpack.js",
       "static/chunks/pages/_error.js"
     ],
-    "/admin": [
+    "/auth/password/forgot": [
       "static/chunks/main.js",
       "static/chunks/webpack.js",
       "static/css/styles.chunk.css",
       "static/chunks/styles.js",
-      "static/chunks/pages/admin.js"
-    ],
-    "/signin": [
-      "static/chunks/main.js",
-      "static/chunks/webpack.js",
-      "static/css/styles.chunk.css",
-      "static/chunks/styles.js",
-      "static/chunks/pages/signin.js"
+      "static/chunks/pages/auth/password/forgot.js"
     ]
   },
   "ampFirstPages": []
