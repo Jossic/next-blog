@@ -24,19 +24,19 @@
       "static/chunks/webpack.js",
       "static/chunks/pages/_error.js"
     ],
-    "/auth/password/reset/[id]": [
+    "/auth/account/activate/[id]": [
       "static/chunks/main.js",
       "static/chunks/webpack.js",
       "static/css/styles.chunk.css",
       "static/chunks/styles.js",
-      "static/chunks/pages/auth/password/reset/[id].js"
+      "static/chunks/pages/auth/account/activate/[id].js"
     ],
-    "/user/update": [
+    "/signup": [
       "static/chunks/main.js",
       "static/chunks/webpack.js",
       "static/css/styles.chunk.css",
       "static/chunks/styles.js",
-      "static/chunks/pages/user/update.js"
+      "static/chunks/pages/signup.js"
     ]
   },
   "ampFirstPages": []

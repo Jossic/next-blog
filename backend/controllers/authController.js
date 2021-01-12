@@ -41,41 +41,73 @@ exports.preSignup = (req, res) => {
 	});
 };
 
+// exports.signup = (req, res) => {
+// 	User.findOne({
+// 		email: req.body.email,
+// 	}).exec((err, user) => {
+// 		if (user) {
+// 			return res.status(400).json({
+// 				error: 'Cet email est déjà utilisé',
+// 			});
+// 		}
+
+// 		const { name, email, password } = req.body;
+// 		let username = shortId.generate();
+// 		let profile = `${process.env.CLIENT_URL}/profile/${username}`;
+
+// 		let newUser = new User({
+// 			name,
+// 			email,
+// 			password,
+// 			profile,
+// 			username,
+// 		});
+// 		newUser.save((err, success) => {
+// 			if (err) {
+// 				return res.status(400).json({
+// 					error: err,
+// 				});
+// 			}
+// 			// res.json({
+// 			// 	user: success,
+// 			// });
+// 			res.json({
+// 				message: 'Enregistrement confirmé, connectez-vous',
+// 			});
+// 		});
+// 	});
+// };
+
 exports.signup = (req, res) => {
-	User.findOne({
-		email: req.body.email,
-	}).exec((err, user) => {
-		if (user) {
-			return res.status(400).json({
-				error: 'Cet email est déjà utilisé',
-			});
-		}
-
-		const { name, email, password } = req.body;
-		let username = shortId.generate();
-		let profile = `${process.env.CLIENT_URL}/profile/${username}`;
-
-		let newUser = new User({
-			name,
-			email,
-			password,
-			profile,
-			username,
-		});
-		newUser.save((err, success) => {
+	const token = req.body.token;
+	if (token) {
+		jwt.verify(token, process.env.JWT_SECRET_ACTIVATION, (err, decoded) => {
 			if (err) {
-				return res.status(400).json({
-					error: err,
+				return res.status(401).json({
+					error: 'Lien expiré, Recommencez',
 				});
 			}
-			// res.json({
-			// 	user: success,
-			// });
-			res.json({
-				message: 'Enregistrement confirmé, connectez-vous',
+			const { name, email, password } = jwt.decode(token);
+			let username = shortId.generate();
+			let profile = `${process.env.CLIENT_URL}/profile/${username}`;
+
+			const user = new User({ name, email, password, profile, username });
+			user.save((err, user) => {
+				if (err) {
+					return res.status(401).json({
+						error: errorHandler(err),
+					});
+				}
+				return res.json({
+					message: 'Enregistrement validé, connectez-vous !',
+				});
 			});
 		});
-	});
+	} else {
+		return res.json({
+			message: 'Ouups, quelque chose ne va pas, rééssayez !',
+		});
+	}
 };
 
 exports.signin = (req, res) => {
