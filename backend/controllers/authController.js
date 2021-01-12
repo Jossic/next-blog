@@ -187,7 +187,6 @@ exports.forgotPassword = (req, res) => {
 };
 
 exports.resetPassword = (req, res) => {
-	console.log('req.body ->', req.body);
 	const { resetPasswordLink, newPassword } = req.body;
 	if (resetPasswordLink) {
 		jwt.verify(
@@ -213,7 +212,6 @@ exports.resetPassword = (req, res) => {
 					user = _.extend(user, updatedFields);
 
 					user.save((err, result) => {
-						console.log('user ->', user);
 						if (err) {
 							return res.status(400).json({
 								error: errorHandler(err),
