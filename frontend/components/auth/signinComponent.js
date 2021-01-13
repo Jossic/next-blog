@@ -75,8 +75,10 @@ const SigninComponent = () => {
 					/>
 				</div>
 
-				<div>
-					<button className='btn btn-primary'>Se connecter</button>
+				<div className='text-center'>
+					<button className='btn btn-primary btn-lg'>
+						Se connecter
+					</button>
 				</div>
 			</form>
 		);
@@ -90,11 +92,13 @@ const SigninComponent = () => {
 			<LoginGoogle />
 			{showForm && signinForm()}
 			<br />
-			<Link href='/auth/password/forgot'>
-				<a className='btn btn-outline-danger btn-sm'>
-					Mot de passe oublié ?
-				</a>
-			</Link>
+			<div className='text-center'>
+				<Link href='/auth/password/forgot'>
+					<a className='btn btn-outline-danger btn-sm'>
+						Mot de passe oublié ?
+					</a>
+				</Link>
+			</div>
 		</>
 	);
 };

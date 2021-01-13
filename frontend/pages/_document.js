@@ -1,6 +1,22 @@
 import Document, { Html, Head, Main, NextScript } from 'next/document';
+import getConfig from 'next/config';
+const { publicRuntimeConfig } = getConfig();
 
 class MyDocument extends Document {
+	setGoogleTags() {
+		if (publicRuntimeConfig.PRODUCTION) {
+			return {
+				__html: `
+				window.dataLayer = window.dataLayer || [];
+				function gtag(){dataLayer.push(arguments);}
+				gtag('js', new Date());
+
+				gtag('config', 'G-YZ51S1N4HZ');
+				`,
+			};
+		}
+	}
+
 	render() {
 		return (
 			<Html lang='fr'>
@@ -18,6 +34,12 @@ class MyDocument extends Document {
 						crossOrigin='anonymous'
 					/> */}
 					<link rel='stylesheet' href='/static/css/styles.css' />
+					<script
+						async
+						src='https://www.googletagmanager.com/gtag/js?id=G-YZ51S1N4HZ'></script>
+
+					<script
+						dangerouslySetInnerHTML={this.setGoogleTags()}></script>
 				</Head>
 				<body>
 					<Main />

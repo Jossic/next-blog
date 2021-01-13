@@ -30,7 +30,7 @@ const LoginGoogle = () => {
 	};
 
 	return (
-		<div className='login-with-google-div pb-4'>
+		<div className='login-with-google-div pb-4 text-center'>
 			<GoogleLogin
 				clientId={GOOGLE_CLIENT_ID}
 				buttonText='Se connecter avec Google'
