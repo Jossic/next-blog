@@ -8,7 +8,6 @@ const Blog = require('../models/blogModel');
 const { OAuth2Client } = require('google-auth-library');
 
 const { sendEmailWithNodemailer } = require('../helpers/email');
-const shortid = require('shortid');
 
 exports.preSignup = (req, res) => {
 	const { name, email, password } = req.body;
@@ -316,7 +315,7 @@ exports.googleLogin = (req, res) => {
 							user: { _id, email, name, role, username },
 						});
 					} else {
-						let username = shortid.generate();
+						let username = shortId.generate();
 						let profile = `${process.env.CLIENT_URL}/profile/${username}`;
 						let password = jti + process.env.JWT_SECRET;
 						user = new User({
